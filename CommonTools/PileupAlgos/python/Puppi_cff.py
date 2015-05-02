@@ -19,13 +19,13 @@ puppiForward = cms.VPSet(
                  applyLowPUCorr = cms.bool(True),
                  combOpt        = cms.int32(0),
                  cone           = cms.double(0.3),
-                 rmsPtMin       = cms.double(0.5),
+                 rmsPtMin       = cms.double(0.1),
                  rmsScaleFactor = cms.double(1.0)
                  )
                 )
 
 puppi = cms.EDProducer("PuppiProducer",#cms.PSet(#"PuppiProducer",
-                       UseDeltaZCut   = cms.bool  (False),
+                       UseDeltaZCut   = cms.bool(False),
                        DeltaZCut      = cms.double(0.3),
                        candName       = cms.InputTag('particleFlow'),
                        vertexName     = cms.InputTag('offlinePrimaryVertices'),
@@ -39,8 +39,11 @@ puppi = cms.EDProducer("PuppiProducer",#cms.PSet(#"PuppiProducer",
                          etaMin = cms.double(0.),
                          etaMax = cms.double( 2.5),
                          ptMin  = cms.double(0.),
-                         MinNeutralPt   = cms.double(0.2),
-                         MinNeutralPtSlope   = cms.double(0.02),
+                         MinNeutralPt   = cms.double(0.1),
+                         MinNeutralPtSlope   = cms.double(0.005),
+                         RMSEtaSF = cms.double(1.0),
+                         MedEtaSF = cms.double(1.0),
+                         EtaMaxExtrap = cms.double(2.0),
                          puppiAlgos = puppiCentral
                         ),
                         cms.PSet( 
@@ -49,6 +52,9 @@ puppi = cms.EDProducer("PuppiProducer",#cms.PSet(#"PuppiProducer",
                          ptMin  = cms.double(0.0),
                          MinNeutralPt        = cms.double(1.0),
                          MinNeutralPtSlope   = cms.double(0.005),
+                         RMSEtaSF = cms.double(1.545),
+                         MedEtaSF = cms.double(0.845),
+                         EtaMaxExtrap = cms.double(2.0),
                          puppiAlgos = puppiForward
                         ),
                         cms.PSet( 
@@ -57,6 +63,9 @@ puppi = cms.EDProducer("PuppiProducer",#cms.PSet(#"PuppiProducer",
                          ptMin  = cms.double(0.0),
                          MinNeutralPt        = cms.double(1.5),
                          MinNeutralPtSlope   = cms.double(0.005),
+                         RMSEtaSF = cms.double(1.18),
+                         MedEtaSF = cms.double(0.4397),                         
+                         EtaMaxExtrap = cms.double(2.0),
                          puppiAlgos = puppiForward
                        )
                       )
