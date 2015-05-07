@@ -99,9 +99,9 @@ void PuppiProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
             pD0        = lPack->dxy();
             closestVtx = &(*(lPack->vertexRef()));
             pVtxId = (lPack->fromPV() != (pat::PackedCandidate::PVUsedInFit));
-            if( (lPack->fromPV() == pat::PackedCandidate::PVLoose) ||
-               (lPack->fromPV() == pat::PackedCandidate::PVTight) )
-                closestVtx = 0;
+            if( (lPack->fromPV() == pat::PackedCandidate::PVLoose) || (lPack->fromPV() == pat::PackedCandidate::PVTight) ){
+                pVtxId = 0;
+            } 
         }
         pReco.dZ      = pDZ;
         pReco.d0      = pD0;
@@ -119,7 +119,8 @@ void PuppiProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
         if(fUseDZ && pDZ > -9999 && closestVtx == 0 && (fabs(pDZ) > fDZCut) && fabs(pReco.charge) > 0) pReco.id = 2;
         
         //std::cout << "pVtxId = " << pVtxId << ", and charge = " << itPF->charge() << ", and closestVtx = " << closestVtx << ", and id = " << pReco.id << std::endl;
-        
+        //std::cout << "charge = " << itPF->charge() << ", pDZ = " << pDZ << ", pVtxId = " << pVtxId << ", closestVtx = " << closestVtx << ", fromPV() = " << lPack->fromPV() << ", pReco.id = " << pReco.id << std::endl;
+
         fRecoObjCollection.push_back(pReco);
     }
     fPuppiContainer->initialize(fRecoObjCollection);
