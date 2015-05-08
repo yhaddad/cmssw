@@ -1,10 +1,22 @@
+
+# python config files
 __init__.py
 *.pyc
 .*.swp
+
+# editor related files 
 .#*
 #*#
 *~
+
+# root related file 
 *.root 
 rootlogon.*
+
+# flashgg
 **/flashgg
 ./flashgg/**
+
+# workspace
+**/workspace
+./workspace/**
