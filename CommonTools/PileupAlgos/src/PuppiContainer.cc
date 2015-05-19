@@ -42,10 +42,10 @@ void PuppiContainer::initialize(const std::vector<RecoObj> &iRecoObjects) {
     for (unsigned int i = 0; i < fRecoParticles.size(); i++){
         fastjet::PseudoJet curPseudoJet;
         auto fRecoParticle = fRecoParticles[i];
-        float nom = sqrt((fRecoParticle.m)*(fRecoParticle.m) + (fRecoParticle.pt)*(fRecoParticle.pt)*(cosh(fRecoParticle.eta))*(cosh(fRecoParticle.eta))) + (fRecoParticle.pt)*sinh(fRecoParticle.eta);//hacked
-        float denom = sqrt((fRecoParticle.m)*(fRecoParticle.m) + (fRecoParticle.pt)*(fRecoParticle.pt));//hacked
-        float rapidity = log(nom/denom);//hacked
-        curPseudoJet.reset_PtYPhiM(fRecoParticle.pt,rapidity,fRecoParticle.phi,fRecoParticle.m);//hacked
+        // float nom = sqrt((fRecoParticle.m)*(fRecoParticle.m) + (fRecoParticle.pt)*(fRecoParticle.pt)*(cosh(fRecoParticle.eta))*(cosh(fRecoParticle.eta))) + (fRecoParticle.pt)*sinh(fRecoParticle.eta);//hacked
+        // float denom = sqrt((fRecoParticle.m)*(fRecoParticle.m) + (fRecoParticle.pt)*(fRecoParticle.pt));//hacked
+        // float rapidity = log(nom/denom);//hacked
+        curPseudoJet.reset_PtYPhiM(fRecoParticle.pt,fRecoParticle.rapidity,fRecoParticle.phi,fRecoParticle.m);//hacked
         //curPseudoJet.reset_PtYPhiM(fRecoParticle.pt,fRecoParticle.eta,fRecoParticle.phi,fRecoParticle.m);
         int puppi_register = 0;
         if(fRecoParticle.id == 0 or fRecoParticle.charge == 0)  puppi_register = 0; // zero is neutral hadron
@@ -235,9 +235,12 @@ std::vector<double> const & PuppiContainer::puppiWeights() {
         //Basic Cuts
         if(pWeight                         < fPuppiWeightCut) pWeight = 0;  //==> Elminate the low Weight stuff
         if(pWeight*fPFParticles[i0].pt()   < fPuppiAlgo[pPupId].neutralPt(fNPV) && fRecoParticles[i0].id == 0 ) pWeight = 0;  //threshold cut on the neutral Pt
+        
+        //std::cout << "fRecoParticles[i0].pt = " <<  fRecoParticles[i0].pt << ", fRecoParticles[i0].charge = " << fRecoParticles[i0].charge << ", fRecoParticles[i0].id = " << fRecoParticles[i0].id << ", weight = " << pWeight << std::endl;
+
         fWeights .push_back(pWeight);
-        fAlphaMed.push_back(fPuppiAlgo[pPupId].fMedian[0]);
-        fAlphaRMS.push_back(fPuppiAlgo[pPupId].fRMS   [0]);        
+        fAlphaMed.push_back(fPuppiAlgo[pPupId].median(0));
+        fAlphaRMS.push_back(fPuppiAlgo[pPupId].rms(0));        
         //Now get rid of the thrown out weights for the particle collection
         if(std::abs(pWeight) < std::numeric_limits<double>::denorm_min() ) continue;
         //Produce
