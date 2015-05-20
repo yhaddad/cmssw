@@ -9,6 +9,7 @@
 #include "DataFormats/Provenance/interface/ProductID.h"
 #include <memory>
 #include <vector>
+#include "FWCore/Utilities/interface/HideStdSharedPtrFromRoot.h"
 
 namespace edm {
   template<typename T> class RefToBase;

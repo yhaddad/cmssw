@@ -8,6 +8,8 @@ Forward declarations of types in the EDM.
 ----------------------------------------------------------------------*/
 #include <memory>
 
+#include "FWCore/Utilities/interface/HideStdSharedPtrFromRoot.h"
+
 namespace edm 
 {
   class BasicHandle;

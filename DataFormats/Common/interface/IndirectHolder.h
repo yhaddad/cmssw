@@ -4,6 +4,7 @@
 #include "DataFormats/Common/interface/BaseHolder.h"
 #include "DataFormats/Common/interface/RefHolderBase.h"
 #include "DataFormats/Provenance/interface/ProductID.h"
+#include "FWCore/Utilities/interface/HideStdSharedPtrFromRoot.h"
 
 #include <memory>
 

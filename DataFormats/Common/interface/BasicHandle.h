@@ -32,6 +32,7 @@ If failedToGet() returns false but isValid() is also false then no attempt
 #include "FWCore/Utilities/interface/GCC11Compatibility.h"
 
 #include <memory>
+#include "FWCore/Utilities/interface/HideStdSharedPtrFromRoot.h"
 
 namespace cms {
   class Exception;

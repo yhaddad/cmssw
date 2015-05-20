@@ -14,7 +14,7 @@ public:
     {}
     ~RecoObj(){}
     
-    float         pt, eta, phi, m, rapidity;  // kinematics
+    float         pt, eta, phi, m;  // kinematics
     int           id;
     int           pfType;
     int           vtxId;               // Vertex Id from Vertex Collection
