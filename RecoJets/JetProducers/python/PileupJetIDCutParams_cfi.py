@@ -244,14 +244,11 @@ PuJetIdCutBased_wp_new = cms.PSet(
     Pt3050_RMSMedium       = cms.vdouble( 0.045, 0.03, 0.035),
     
     #Loose Id
-    Pt010_RMSLoose         = cms.vdouble( 0.05, 0.04, 0.04, 0.0.035),
-    Pt1020_RMSLoose        = cms.vdouble( 0.05, 0.04, 0.04, 0.0.035),
-    Pt2030_RMSLoose        = cms.vdouble( 0.05, 0.04, 0.04, 0.0.035),
-    Pt3050_RMSLoose        = cms.vdouble( 0.05, 0.04, 0.04, 0.0.035)
+    Pt010_RMSLoose         = cms.vdouble( 0.05, 0.04, 0.04, 0.035),
+    Pt1020_RMSLoose        = cms.vdouble( 0.05, 0.04, 0.04, 0.035),
+    Pt2030_RMSLoose        = cms.vdouble( 0.05, 0.04, 0.04, 0.035),
+    Pt3050_RMSLoose        = cms.vdouble( 0.05, 0.04, 0.04, 0.035)
 )
-
-
-
 
 JetIdParams = cms.PSet(
     #4 Eta Categories  0-2.5 2.5-2.75 2.75-3.0 3.0-5.0
