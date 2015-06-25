@@ -61,11 +61,18 @@ full_5x_chs = cms.PSet(
  )
 ####################################################################################################################  
 cutbased = cms.PSet( 
- impactParTkThreshold = cms.double(1.),
- cutBased = cms.bool(True),
- JetIdParams = PuJetIdCutBased_wp,
- label = cms.string("cutbased")
- )
+    impactParTkThreshold = cms.double(1.),
+    cutBased = cms.bool(True),
+    JetIdParams = PuJetIdCutBased_wp,
+    label = cms.string("cutbased")
+)
+
+cutbased_new = cms.PSet( 
+    impactParTkThreshold = cms.double(1.),
+    cutBased = cms.bool(True),
+    JetIdParams = PuJetIdCutBased_wp_new,
+    label = cms.string("cutbased_new")
+)
 
 ####################################################################################################################  
 PhilV1 = cms.PSet(
