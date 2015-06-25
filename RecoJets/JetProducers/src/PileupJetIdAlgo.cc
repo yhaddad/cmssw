@@ -289,12 +289,13 @@ std::pair<int,int> PileupJetIdAlgo::getJetIdKey(float jetPt, float jetEta)
 int PileupJetIdAlgo::computeCutIDflag(float betaStarClassic,float dR2Mean,float nvtx, float jetPt, float jetEta)
 {
   std::pair<int,int> jetIdKey = getJetIdKey(jetPt,jetEta);
-  float betaStarModified = betaStarClassic/log(nvtx-0.64);
+  float betaStarModified      = betaStarClassic/log(nvtx-0.5);
+  
   int idFlag(0);
   if(betaStarModified < betaStarCut_[PileupJetIdentifier::kTight ][jetIdKey.first][jetIdKey.second] && 
      dR2Mean          < rmsCut_     [PileupJetIdentifier::kTight ][jetIdKey.first][jetIdKey.second] 
      ) idFlag += 1 <<  PileupJetIdentifier::kTight;
-
+  
   if(betaStarModified < betaStarCut_[PileupJetIdentifier::kMedium ][jetIdKey.first][jetIdKey.second] && 
      dR2Mean          < rmsCut_     [PileupJetIdentifier::kMedium ][jetIdKey.first][jetIdKey.second] 
      ) idFlag += 1 <<  PileupJetIdentifier::kMedium;
