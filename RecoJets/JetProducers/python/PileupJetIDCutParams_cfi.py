@@ -208,6 +208,48 @@ PuJetIdCutBased_wp = cms.PSet(
     )
 
 
+PuJetIdCutBased_wp_new = cms.PSet(
+    # 4 Eta Categories  0-2.5 2.5-2.75 2.75-3.0 3.0-5.0
+    # betaStarClassic/log(nvtx-0.64) Values
+    # Tight Id
+    
+    Pt010_BetaStarTight    = cms.vdouble( 0.05, 0.13, 0.13, 999.),
+    Pt1020_BetaStarTight   = cms.vdouble( 0.05, 0.13, 0.13, 999.),
+    Pt2030_BetaStarTight   = cms.vdouble( 0.05, 0.13, 0.13, 999.),
+    Pt3050_BetaStarTight   = cms.vdouble( 0.05, 0.13, 0.13, 999.),
+    
+    #Medium Id => Daniele
+    Pt010_BetaStarMedium   = cms.vdouble( 0.09, 0.2, 0.2, 999.),
+    Pt1020_BetaStarMedium  = cms.vdouble( 0.09, 0.2, 0.2, 999.),
+    Pt2030_BetaStarMedium  = cms.vdouble( 0.09, 0.2, 0.2, 999.),
+    Pt3050_BetaStarMedium  = cms.vdouble( 0.09, 0.2, 0.2, 999.),
+    
+    #Loose Id
+    Pt010_BetaStarLoose    = cms.vdouble( 0.25, 0.35, 0.35, 999.),
+    Pt1020_BetaStarLoose   = cms.vdouble( 0.25, 0.35, 0.35, 999.),
+    Pt2030_BetaStarLoose   = cms.vdouble( 0.25, 0.35, 0.35, 999.),
+    Pt3050_BetaStarLoose   = cms.vdouble( 0.25, 0.35, 0.35, 999.),
+    
+    #RMS variable
+    #Tight Id
+    Pt010_RMSTight         = cms.vdouble( 0.04, 0.03, 0.03, 0.02),
+    Pt1020_RMSTight        = cms.vdouble( 0.04, 0.03, 0.03, 0.02),
+    Pt2030_RMSTight        = cms.vdouble( 0.04, 0.03, 0.03, 0.02),
+    Pt3050_RMSTight        = cms.vdouble( 0.04, 0.03, 0.03, 0.02),
+    
+    #Medium Id => Daniele
+    Pt010_RMSMedium        = cms.vdouble( 0.045, 0.03, 0.035),
+    Pt1020_RMSMedium       = cms.vdouble( 0.045, 0.03, 0.035),
+    Pt2030_RMSMedium       = cms.vdouble( 0.045, 0.03, 0.035),
+    Pt3050_RMSMedium       = cms.vdouble( 0.045, 0.03, 0.035),
+    
+    #Loose Id
+    Pt010_RMSLoose         = cms.vdouble( 0.05, 0.04, 0.04, 0.035),
+    Pt1020_RMSLoose        = cms.vdouble( 0.05, 0.04, 0.04, 0.035),
+    Pt2030_RMSLoose        = cms.vdouble( 0.05, 0.04, 0.04, 0.035),
+    Pt3050_RMSLoose        = cms.vdouble( 0.05, 0.04, 0.04, 0.035)
+)
+
 JetIdParams = cms.PSet(
     #4 Eta Categories  0-2.5 2.5-2.75 2.75-3.0 3.0-5.0
 
