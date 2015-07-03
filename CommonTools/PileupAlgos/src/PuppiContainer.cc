@@ -61,7 +61,7 @@ void PuppiContainer::initialize(const std::vector<RecoObj> &iRecoObjects) {
         //if((fRecoParticle.id == 0) && (inParticles[i].id == 2))  _genParticles.push_back( curPseudoJet);
         //if(fRecoParticle.id <= 2 && !(inParticles[i].pt < fNeutralMinE && fRecoParticle.id < 2)) _pfchsParticles.push_back(curPseudoJet);
         //if(fRecoParticle.id == 3) _chargedNoPV.push_back(curPseudoJet);
-        if(fNPV < fRecoParticle.vtxId) fNPV = fRecoParticle.vtxId;
+        // if(fNPV < fRecoParticle.vtxId) fNPV = fRecoParticle.vtxId;
     }
     if (fPVFrac != 0) fPVFrac = double(fChargedPV.size())/fPVFrac;
     else fPVFrac = 0;

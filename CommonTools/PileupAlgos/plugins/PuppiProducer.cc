@@ -71,6 +71,13 @@ void PuppiProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   iEvent.getByToken(tokenVertices_,hVertexProduct);
   const reco::VertexCollection *pvCol = hVertexProduct.product();
 
+   int npv = 0;
+   const reco::VertexCollection::const_iterator vtxEnd = pvCol->end();
+   for (reco::VertexCollection::const_iterator vtxIter = pvCol->begin(); vtxEnd != vtxIter; ++vtxIter) {
+      if (!vtxIter->isFake() && vtxIter->ndof()>=4 && fabs(vtxIter->z())<=24)
+         npv++;
+   }
+
   //Fill the reco objects
   fRecoObjCollection.clear();
   for(CandidateView::const_iterator itPF = pfCol->begin(); itPF!=pfCol->end(); itPF++) {
@@ -169,6 +176,7 @@ void PuppiProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   }
 
   fPuppiContainer->initialize(fRecoObjCollection);
+  fPuppiContainer->setNPV( npv );
 
   //Compute the weights
   const std::vector<double> lWeights = fPuppiContainer->puppiWeights();
