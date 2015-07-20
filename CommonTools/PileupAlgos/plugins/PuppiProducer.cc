@@ -29,24 +29,27 @@
 
 // ------------------------------------------------------------------------------------------
 PuppiProducer::PuppiProducer(const edm::ParameterSet& iConfig) {
-  fPuppiDiagnostics = iConfig.getParameter<bool>("puppiDiagnostics");
-  fPuppiForLeptons = iConfig.getParameter<bool>("puppiForLeptons");
-  fUseDZ     = iConfig.getParameter<bool>("UseDeltaZCut");
-  fDZCut     = iConfig.getParameter<double>("DeltaZCut");
-  fPuppiContainer = std::unique_ptr<PuppiContainer> ( new PuppiContainer(iConfig) );
+  fPuppiDiagnostics  = iConfig.getParameter<bool>("puppiDiagnostics");
+  fPuppiForLeptons   = iConfig.getParameter<bool>("puppiForLeptons");
+  fUseDZ             = iConfig.getParameter<bool>("UseDeltaZCut");
+  fDZCut             = iConfig.getParameter<double>("DeltaZCut");
+  fPuppiContainer    = std::unique_ptr<PuppiContainer> ( new PuppiContainer(iConfig) );
 
-  tokenPFCandidates_
-    = consumes<CandidateView>(iConfig.getParameter<edm::InputTag>("candName"));
-  tokenVertices_
-    = consumes<VertexCollection>(iConfig.getParameter<edm::InputTag>("vertexName"));
- 
-
+  tokenPFCandidates_ = consumes<CandidateView>(iConfig.getParameter<edm::InputTag>("candName"));
+  tokenVertices_     = consumes<VertexCollection>(iConfig.getParameter<edm::InputTag>("vertexName"));
+  
+  // flashgg: add the diphotonCandidates 
+  useFlashggVertex    = iConfig.getUntrackedParameter<bool>("UseFlashggVertex",false);
+  diphotonVertexIndex = iConfig.getUntrackedParameter<int>("UseFlashggVertex",false);
+  diPhotonToken_      = consumes<View<flashgg::DiPhotonCandidate> >(iConfig.getUntrackedParameter<edm::InputTag> ("DiPhotonTag", InputTag("flashggDiPhotons")));
+    
+  
   produces<edm::ValueMap<float> > ();
   produces<edm::ValueMap<LorentzVector> > ();
-  produces< edm::ValueMap<reco::CandidatePtr> >(); 
+  produces<edm::ValueMap<reco::CandidatePtr> >(); 
   
   produces<PFOutputCollection>();
-
+  
   if (fPuppiDiagnostics){
     produces<double> ("PuppiNAlgos");
     produces<std::vector<double>> ("PuppiRawAlphas");
@@ -57,6 +60,7 @@ PuppiProducer::PuppiProducer(const edm::ParameterSet& iConfig) {
 }
 // ------------------------------------------------------------------------------------------
 PuppiProducer::~PuppiProducer(){
+  
 }
 // ------------------------------------------------------------------------------------------
 void PuppiProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
@@ -65,19 +69,28 @@ void PuppiProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   edm::Handle<CandidateView> hPFProduct;
   iEvent.getByToken(tokenPFCandidates_,hPFProduct);
   const CandidateView *pfCol = hPFProduct.product();
-
+  
   // Get vertex collection w/PV as the first entry?
   edm::Handle<reco::VertexCollection> hVertexProduct;
   iEvent.getByToken(tokenVertices_,hVertexProduct);
   const reco::VertexCollection *pvCol = hVertexProduct.product();
+  
+  int npv = 0;
+  const reco::VertexCollection::const_iterator vtxEnd  = pvCol->end();
+  for ( reco::VertexCollection::const_iterator vtxIter = pvCol->begin(); vtxEnd != vtxIter; ++vtxIter) {
+    if (!vtxIter->isFake() && vtxIter->ndof()>=4 && fabs(vtxIter->z())<=24)
+      npv++;
+  }
 
-   int npv = 0;
-   const reco::VertexCollection::const_iterator vtxEnd = pvCol->end();
-   for (reco::VertexCollection::const_iterator vtxIter = pvCol->begin(); vtxEnd != vtxIter; ++vtxIter) {
-      if (!vtxIter->isFake() && vtxIter->ndof()>=4 && fabs(vtxIter->z())<=24)
-         npv++;
-   }
-
+  // Get the diphoton collection
+  edm::Handle<View<flashgg::DiPhotonCandidate> > diPhotons;
+  iEvent.getByToken( diPhotonToken_, diPhotons );
+  
+  if(useFlashggVertex && diPhotonPointers.size() >0){
+    lpv = diPhotonPointers[0]->vtx(); // The idea is to eventually loop over ALL diphoton canidates in future commit. FIXME
+  } else {
+    lpv = pvPtrs[0]; 
+  }  
   //Fill the reco objects
   fRecoObjCollection.clear();
   for(CandidateView::const_iterator itPF = pfCol->begin(); itPF!=pfCol->end(); itPF++) {
@@ -109,9 +122,9 @@ void PuppiProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
           if(pDZ > -9999) pVtxId = 0;
         }
         if(iV->trackWeight(pPF->trackRef())>0) {
-            closestVtx  = &(*iV);
-            break;
-          }        
+	  closestVtx  = &(*iV);
+	  break;
+	}        
         // in case it's unassocciated, keep more info
         double tmpdz = 99999;
         if      ( pPF->trackRef().isNonnull()    ) tmpdz = pPF->trackRef()   ->dz(iV->position());
@@ -235,10 +248,10 @@ void PuppiProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   iEvent.put(p4PupOut);
   edm::OrphanHandle<reco::PFCandidateCollection> oh = iEvent.put( fPuppiCandidates );
   for(unsigned int ic=0, nc = oh->size(); ic < nc; ++ic) {
-      reco::CandidatePtr pkref( oh, ic );
-      values[ic] = pkref;
+    reco::CandidatePtr pkref( oh, ic );
+    values[ic] = pkref;
     
-   }  
+  }  
   std::auto_ptr<edm::ValueMap<reco::CandidatePtr> > pfMap_p(new edm::ValueMap<reco::CandidatePtr>());
   edm::ValueMap<reco::CandidatePtr>::Filler filler(*pfMap_p);
   filler.insert(hPFProduct, values.begin(), values.end());
