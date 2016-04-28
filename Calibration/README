@@ -1,0 +1,27 @@
+/** 
+* \mainpage 
+* \author Shervin Nourbakhsh
+*
+* \ref preReq
+*
+* \ref page1
+*
+* <A HREF="https://github.com/ECALELFS/ECALELF/blob/master/README.md"> Download instructions </A>
+*
+*
+* Working with ntuples: \ref page4
+*
+### Instructions for ECAL validator:
+ - \ref DATAFORMATS
+ - \ref pFindInfos 
+ - \ref pAlcarecoProduction
+ - \ref page5 
+ - \ref page6
+ - \ref page7
+* 
+
+* Small eveloper guide: \ref Devel
+### For experts:
+* \ref page2
+*/
+
