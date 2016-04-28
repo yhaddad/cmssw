@@ -25,51 +25,40 @@
 #include "DataFormats/EgammaReco/interface/SuperCluster.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/ESHandle.h"
-#include "FWCore/ParameterSet/interface/ParameterSet.h"
 
 class SCEnergyCorrectorSemiParm {
- public:
-  SCEnergyCorrectorSemiParm();
-  ~SCEnergyCorrectorSemiParm(); 
-  
-  void setTokens(const edm::ParameterSet &iConfig, edm::ConsumesCollector &cc);
-  
-  void modifyObject(reco::SuperCluster &sc);
-  
-  void setEventSetup(const edm::EventSetup &es);
-  void setEvent(const edm::Event &e);
-  
- protected:    
-  const GBRForestD *foresteb_;
-  const GBRForestD *forestee_;
-  const GBRForestD *forestsigmaeb_;
-  const GBRForestD *forestsigmaee_;
-  
-  edm::ESHandle<CaloTopology> calotopo_;
-  edm::ESHandle<CaloGeometry> calogeom_;
-  const CaloTopologyRecord* topo_record_;
-  const CaloGeometryRecord* geom_record_;    
-  
-  edm::EDGetTokenT<EcalRecHitCollection> tokenEBRecHits_;
-  edm::EDGetTokenT<EcalRecHitCollection> tokenEERecHits_;
-  edm::EDGetTokenT<reco::VertexCollection> tokenVertices_;    
+  public:
+    SCEnergyCorrectorSemiParm();
+    ~SCEnergyCorrectorSemiParm(); 
+        
+    void setTokens(edm::ConsumesCollector &cc, const edm::ParameterSet& iConfig);
+    
+	std::pair<double,double> GetCorrections(const reco::SuperCluster &sc) const;
+    void modifyObject(reco::SuperCluster &sc);
 
-  edm::Handle<reco::VertexCollection> vertices_;
-  edm::Handle<EcalRecHitCollection>  rechitsEB_;
-  edm::Handle<EcalRecHitCollection>  rechitsEE_;
+    void setEventSetup(const edm::EventSetup &es);
+    void setEvent(const edm::Event &e);
+    
+  protected:    
+    GBRForestD *foresteb_;
+    GBRForestD *forestee_;
+    GBRForestD *forestsigmaeb_;
+    GBRForestD *forestsigmaee_;
+    
+    edm::ESHandle<CaloTopology> calotopo_;
+    edm::ESHandle<CaloGeometry> calogeom_;
+    const CaloTopologyRecord* topo_record_;
+    const CaloGeometryRecord* geom_record_;    
+    
+    edm::EDGetTokenT<EcalRecHitCollection> tokenEBRecHits_;
+    edm::EDGetTokenT<EcalRecHitCollection> tokenEERecHits_;
+    edm::EDGetTokenT<reco::VertexCollection> tokenVertices_;    
+    edm::Handle<reco::VertexCollection> vertices_;
+    edm::Handle<EcalRecHitCollection>  rechitsEB_;
+    edm::Handle<EcalRecHitCollection>  rechitsEE_;
+    
+    
+    };
 
-  edm::InputTag ecalHitsEBInputTag_;
-  edm::InputTag ecalHitsEEInputTag_;
-  edm::InputTag vertexInputTag_;
 
-  std::string regressionKeyEB_;
-  std::string uncertaintyKeyEB_;
-  std::string regressionKeyEE_;
-  std::string uncertaintyKeyEE_;
-
- private:
-  bool isHLT_;
-  int nHitsAboveThreshold_;
-  float eThreshold_;
-};
 #endif
